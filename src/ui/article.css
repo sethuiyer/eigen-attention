@@ -1,0 +1,991 @@
+/* Reading surface: a measured editorial plate for equation-heavy prose. */
+
+.reading-section {
+  --reading-measure: 720px;
+  --reading-chrome: 1040px;
+  --reading-size: 21px;
+  --reading-leading: 1.76;
+  padding-top: clamp(46px, 6vw, 78px);
+  overflow-wrap: break-word;
+  font-optical-sizing: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Top line and reading tools
+   -------------------------------------------------------------------------- */
+
+.reading-section .reading-topline {
+  width: min(100%, var(--reading-chrome));
+  margin-inline: auto;
+}
+
+.reading-section .reading-topline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 0 13px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.reading-section .reading-identity {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px 17px;
+  min-width: 0;
+}
+
+.reading-section .reading-kicker {
+  font: 600 10px/1 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.15em;
+  color: var(--ink);
+}
+
+.reading-section .reading-identity-meta {
+  font: 500 9.5px/1.4 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.reading-section .reading-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reading-section .reading-tools-label {
+  margin-right: 2px;
+  font: 500 9px/1 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.reading-section .reading-tools .text-size,
+.reading-section .reading-tools .focus-toggle {
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.reading-section .reading-tools .text-size {
+  font: 400 15px/1 var(--serif);
+}
+
+.reading-section .reading-tools .focus-toggle svg {
+  width: 15px;
+  height: 15px;
+}
+
+.reading-section .reading-tools .text-size:hover,
+.reading-section .reading-tools .focus-toggle:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.reading-section .reading-tools .focus-toggle[aria-pressed="true"] {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: var(--soft-orange);
+}
+
+/* --------------------------------------------------------------------------
+   Article header and essay folio
+   -------------------------------------------------------------------------- */
+
+.reading-section .article-header {
+  width: min(100%, var(--reading-measure));
+  margin: clamp(40px, 5.5vw, 62px) auto 0;
+}
+
+.reading-section .article-header-rule {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+  font: 500 9px/1.4 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.reading-section .article-header-rule span:first-child {
+  color: var(--orange);
+}
+
+.reading-section .article-measure {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  height: 18px;
+  margin-bottom: clamp(26px, 3.5vw, 38px);
+  border-bottom: 1px solid var(--line);
+}
+
+.reading-section .article-measure span {
+  border-left: 1px solid var(--line);
+  opacity: 0.75;
+}
+
+.reading-section .article-measure span:first-child {
+  border-left: 0;
+}
+
+.reading-section .article-header-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 116px;
+  align-items: start;
+  gap: clamp(24px, 3vw, 34px);
+}
+
+.reading-section .article-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+  max-width: none;
+  margin: 0 0 17px;
+  font: 600 9.5px/1.5 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.reading-section .article-label #document-kind {
+  color: var(--orange);
+}
+
+.reading-section .article-label-separator {
+  color: var(--line);
+}
+
+.reading-section .article-title {
+  max-width: none;
+  margin: 0 0 21px;
+  font-family: var(--display, var(--serif));
+  font-size: clamp(40px, 4.4vw, 55px);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.036em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.reading-section .article-description {
+  max-width: 57ch;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.reading-section .article-folio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.reading-section .article-folio-kicker {
+  font: 600 9px/1.4 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.reading-section .article-folio-number {
+  margin: 7px 0 10px;
+  font-family: var(--display, var(--serif));
+  font-size: clamp(68px, 7.6vw, 104px);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.065em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--ink);
+}
+
+.reading-section .article-folio-unit {
+  max-width: 100px;
+  font: 600 8px/1.55 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.reading-section .article-folio-meta {
+  width: 100%;
+  margin-top: 13px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  font: 500 8.5px/1.6 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   Main prose measure
+   -------------------------------------------------------------------------- */
+
+.reading-section #article-content,
+.reading-section .reading-close {
+  width: min(100%, var(--reading-measure));
+  margin-inline: auto;
+}
+
+.reading-section .prose {
+  max-width: var(--reading-measure);
+  margin: 48px auto 0;
+  counter-reset: equation;
+  font-family: var(--serif);
+  font-size: var(--reading-size, 21px);
+  line-height: var(--reading-leading, 1.72);
+  color: var(--ink);
+}
+
+.reading-section .prose p {
+  margin: 0 0 24px;
+  padding-block: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  text-wrap: pretty;
+}
+
+.reading-section .prose h2 {
+  position: relative;
+  margin: 72px 0 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--serif);
+  font-size: clamp(31px, 3vw, 36px);
+  font-weight: 500;
+  line-height: 1.24;
+  letter-spacing: -0.018em;
+  max-width: none;
+  scroll-margin-top: 18px;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.reading-section .prose h2::before {
+  content: "§";
+  display: inline;
+  width: auto;
+  margin: 0 0.42em 0 0;
+  border: 0;
+  font-family: var(--mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.56em;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--orange);
+  vertical-align: 0.16em;
+}
+
+.reading-section .prose h2::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 58px;
+  height: 2px;
+  background: var(--orange);
+}
+
+.reading-section .prose h3 {
+  max-width: none;
+  margin: 38px 0 15px;
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.006em;
+  scroll-margin-top: 18px;
+  text-wrap: balance;
+}
+
+.reading-section .prose > h3::before {
+  content: "—";
+  margin-right: 0.4em;
+  font-family: var(--mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.7em;
+  vertical-align: 0.12em;
+  color: var(--orange);
+}
+
+.reading-section .prose h2:target,
+.reading-section .prose h3:target {
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 12px var(--accent-soft);
+}
+
+.reading-section .prose h2:target {
+  border-top-color: var(--orange);
+}
+
+.reading-section .prose a {
+  color: var(--orange);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: background-color 140ms ease;
+}
+
+.reading-section .prose a:hover {
+  background: var(--soft-orange);
+}
+
+.reading-section .prose strong {
+  font-weight: 600;
+}
+
+.reading-section .prose em {
+  font-style: italic;
+}
+
+.reading-section .prose ul,
+.reading-section .prose ol {
+  margin: 0 0 25px;
+  padding-left: 1.35em;
+}
+
+.reading-section .prose ol {
+  list-style: decimal-leading-zero;
+}
+
+.reading-section .prose li {
+  margin-bottom: 0.45em;
+  padding-left: 0.25em;
+  overflow-wrap: break-word;
+}
+
+.reading-section .prose li::marker {
+  color: var(--orange);
+  font-family: var(--mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.78em;
+}
+
+.reading-section .prose blockquote {
+  margin: 34px 0 36px;
+  padding: 3px 0 3px 24px;
+  border-left: 1px solid var(--orange);
+  font-size: 1.03em;
+  font-style: italic;
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+.reading-section .prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.reading-section .prose hr {
+  height: 1px;
+  margin: 48px 0;
+  border: 0;
+  background: var(--line);
+}
+
+.reading-section .prose pre {
+  margin: 32px 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--sage);
+  font: 12px/1.7 var(--mono, "SFMono-Regular", Consolas, monospace);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.reading-section .prose code {
+  padding: 0.1em 0.32em;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--sage);
+  font-family: var(--mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.76em;
+}
+
+.reading-section .prose pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Mathematics: plates, rules, equation folios, inline stability
+   -------------------------------------------------------------------------- */
+
+.reading-section .prose .katex {
+  font-size: 1em;
+  line-height: 1;
+}
+
+.reading-section .prose p > .katex,
+.reading-section .prose li > .katex,
+.reading-section .prose td > .katex,
+.reading-section .prose th > .katex {
+  vertical-align: baseline;
+}
+
+.reading-section .prose .math-block {
+  position: relative;
+  max-width: 100%;
+  margin: 36px 0 40px;
+  padding: 27px 32px 25px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.reading-section .prose .math-block::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  left: 0;
+  width: 2px;
+  background: var(--orange);
+  opacity: 0.62;
+}
+
+.reading-section .prose .math-block::after {
+  counter-increment: equation;
+  content: "(" counter(equation) ")";
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  font: 500 8px/1.4 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.reading-section .prose .math-block > .katex-display {
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.reading-section .prose .math-block > .katex-display > .katex {
+  width: max-content;
+  min-width: 100%;
+  white-space: nowrap;
+}
+
+.reading-section .prose li > .katex {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 5px;
+  vertical-align: middle;
+}
+
+.reading-section .prose .math-error {
+  color: var(--orange);
+  font-family: var(--mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Editorial data tables
+   -------------------------------------------------------------------------- */
+
+.reading-section .prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 36px 0 40px;
+  overflow-x: auto;
+  border: 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  border-collapse: collapse;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.reading-section .prose th {
+  padding: 11px 13px;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  background: transparent;
+  font: 600 8.5px/1.45 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.reading-section .prose td {
+  padding: 12px 13px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.reading-section .prose th:first-child,
+.reading-section .prose td:first-child {
+  min-width: 210px;
+}
+
+.reading-section .prose tr:last-child td {
+  border-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Original figure and closing plate
+   -------------------------------------------------------------------------- */
+
+.reading-section .reading-close {
+  margin-top: 64px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.reading-section .reading-close-rule {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+}
+
+.reading-section .reading-close-rule::before,
+.reading-section .reading-close-rule::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+
+.reading-section .reading-close-rule span {
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--orange);
+}
+
+.reading-section .reading-close-note {
+  margin: 0 0 19px;
+  font: 500 9.5px/1.7 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.reading-section .reading-close-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.reading-section .reading-close-contents,
+.reading-section #back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 4px;
+  border-bottom: 1px solid var(--orange);
+  font: 500 9px/1.5 var(--mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition:
+    color 140ms ease,
+    gap 140ms ease;
+}
+
+.reading-section #back-to-top {
+  color: var(--orange);
+}
+
+.reading-section #back-to-top svg {
+  width: 15px;
+  height: 15px;
+}
+
+.reading-section .reading-close-contents:hover,
+.reading-section #back-to-top:hover {
+  color: var(--orange);
+  gap: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive reading
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .reading-section .article-header-grid {
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 24px;
+  }
+
+  .reading-section .article-folio-number {
+    font-size: clamp(60px, 7.5vw, 88px);
+  }
+}
+
+@media (max-width: 760px) {
+  .reading-section {
+    --reading-size: 20px;
+    --reading-leading: 1.7;
+    padding-top: 40px;
+  }
+
+  .reading-section .reading-topline {
+    align-items: center;
+    padding: 10px 0 11px;
+  }
+
+  .reading-section .reading-identity {
+    gap: 4px 10px;
+  }
+
+  .reading-section .reading-identity-meta {
+    font-size: 7px;
+  }
+
+  .reading-section .reading-tools-label {
+    display: none;
+  }
+
+  .reading-section .article-header {
+    margin-top: 36px;
+  }
+
+  .reading-section .article-header-rule {
+    font-size: 6.8px;
+    letter-spacing: 0.1em;
+  }
+
+  .reading-section .article-header-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .reading-section .article-title {
+    font-size: 40px;
+    line-height: 1.06;
+  }
+
+  .reading-section .article-folio {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: 18px;
+    row-gap: 2px;
+    padding: 13px 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .reading-section .article-folio-kicker {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .reading-section .article-folio-number {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    margin: 0;
+    font-size: 62px;
+  }
+
+  .reading-section .article-folio-unit {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    max-width: none;
+  }
+
+  .reading-section .article-folio-meta {
+    grid-column: 2;
+    grid-row: 3;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .reading-section .prose {
+    margin-top: 38px;
+  }
+
+  .reading-section .prose p {
+    margin-bottom: 20px;
+  }
+
+  .reading-section .prose h2 {
+    margin-top: 54px;
+    padding-top: 17px;
+    font-size: 29px;
+  }
+
+  .reading-section .prose h3 {
+    margin-top: 32px;
+    font-size: 22px;
+  }
+
+  .reading-section .prose .math-block {
+    margin: 30px 0 33px;
+    padding: 22px 18px 21px;
+  }
+
+  .reading-section .prose .math-block::after {
+    right: 9px;
+    bottom: 6px;
+    font-size: 7px;
+  }
+
+  .reading-section .reading-close {
+    margin-top: 48px;
+  }
+
+  .reading-section .reading-close-note {
+    font-size: 8.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reading-section .reading-identity-meta {
+    display: none;
+  }
+
+  .reading-section .reading-tools .text-size,
+  .reading-section .reading-tools .focus-toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .reading-section .article-header-rule span:nth-child(2) {
+    display: none;
+  }
+
+  .reading-section .article-title {
+    font-size: 36px;
+    letter-spacing: -0.028em;
+  }
+
+  .reading-section .article-description {
+    font-size: 11.5px;
+    line-height: 1.7;
+  }
+
+  .reading-section .prose {
+    --reading-size: 20px;
+    line-height: 1.68;
+  }
+
+  .reading-section .prose h2 {
+    font-size: 27px;
+  }
+
+  .reading-section .prose h3 {
+    font-size: 21px;
+  }
+
+  .reading-section .prose .math-block {
+    padding: 18px 13px 18px;
+  }
+
+  .reading-section .prose .math-block::before {
+    top: 10px;
+    bottom: 10px;
+  }
+
+  .reading-section .prose table {
+    font-size: 11.5px;
+  }
+
+  .reading-section .prose th,
+  .reading-section .prose td {
+    padding: 9px 10px;
+  }
+
+  .reading-section .reading-close-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-section * {
+    scroll-behavior: auto;
+  }
+
+  .reading-section .reading-tools .text-size,
+  .reading-section .reading-tools .focus-toggle,
+  .reading-section .prose a,
+  .reading-section .reading-close-contents,
+  .reading-section #back-to-top {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print: keep the argument and its annotations, remove the instrument chrome
+   -------------------------------------------------------------------------- */
+
+@media print {
+  .reading-section {
+    padding: 0;
+    overflow-wrap: normal;
+  }
+
+  .reading-section .reading-topline,
+  .reading-section .reading-tools,
+  .reading-section .article-header-rule,
+  .reading-section .article-measure,
+  .reading-section .article-folio,
+  .reading-section .reading-close-actions {
+    display: none !important;
+  }
+
+  .reading-section .article-header,
+  .reading-section .prose,
+  .reading-section .reading-close {
+    width: auto;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .reading-section .article-header {
+    margin-top: 0;
+  }
+
+  .reading-section .article-title {
+    font-size: 24pt;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .reading-section .article-description {
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+
+  .reading-section .prose {
+    margin-top: 18pt;
+    font-size: 11.5pt;
+    line-height: 1.55;
+    color: #111;
+  }
+
+  .reading-section .prose p {
+    overflow: visible;
+  }
+
+  .reading-section .prose h2 {
+    margin-top: 24pt;
+    font-size: 17pt;
+    break-after: avoid;
+  }
+
+  .reading-section .prose h3 {
+    font-size: 13pt;
+    break-after: avoid;
+  }
+
+  .reading-section .prose .math-block {
+    padding: 10pt 12pt;
+    overflow: visible;
+    border-color: #999;
+    background: transparent;
+    break-inside: avoid;
+  }
+
+  .reading-section .prose .math-block::before {
+    background: #777;
+  }
+
+  .reading-section .prose .math-block::after {
+    display: none;
+  }
+
+  .reading-section .prose .katex-display {
+    overflow: visible;
+  }
+
+  .reading-section .prose table {
+    display: table;
+    width: 100%;
+    overflow: visible;
+    border-color: #777;
+    font-size: 9pt;
+    page-break-inside: auto;
+  }
+
+  .reading-section .prose th {
+    padding: 5pt 7pt;
+    border-color: #777;
+    font-size: 7.5pt;
+  }
+
+  .reading-section .prose td {
+    padding: 6pt 7pt;
+  }
+
+  .reading-section .prose thead {
+    display: table-header-group;
+  }
+
+  .reading-section .prose tr {
+    break-inside: avoid;
+  }
+
+  .reading-section .prose a {
+    color: #111;
+  }
+
+  .reading-section .reading-close {
+    margin-top: 24pt;
+    border-top: 1px solid #999;
+    border-bottom: 0;
+  }
+
+  .reading-section .reading-close-rule {
+    display: none;
+  }
+
+  .reading-section .reading-close-note {
+    display: none;
+  }
+}

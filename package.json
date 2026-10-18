@@ -1,0 +1,17 @@
+{
+  "name": "eigen-math-journal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "deploy": "bash scripts/deploy-pages.sh"
+  },
+  "dependencies": {
+    "katex": "^0.16.22",
+    "marked": "^15.0.12",
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,753 @@
+/* Opening plate — scoped entirely to .opening-hero so it cannot leak into
+   the reading rail, explorer, or masthead. */
+
+.opening-hero {
+  --opening-display: var(--display, var(--serif));
+  --opening-mono: var(
+    --mono,
+    ui-monospace,
+    "SFMono-Regular",
+    "Cascadia Mono",
+    "Roboto Mono",
+    Menlo,
+    monospace
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 96px);
+  padding: clamp(34px, 5.5svh, 68px) 0 clamp(18px, 3svh, 30px);
+  color: var(--ink);
+}
+
+.opening-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(32px, 4.5vw, 74px);
+  row-gap: clamp(32px, 5svh, 64px);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.opening-copy {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  min-width: 0;
+  max-width: 690px;
+}
+
+/* — Kicker — */
+
+.opening-kicker {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--muted);
+  font: 500 10px/1.2 var(--opening-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.opening-square {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  background: var(--orange);
+}
+
+.opening-kicker-rule {
+  width: clamp(20px, 2.4vw, 36px);
+  height: 1px;
+  background: var(--line);
+}
+
+/* — Display title — */
+
+.opening-hero .opening-title {
+  margin: clamp(22px, 3.6svh, 36px) 0 0;
+  font-family: var(--opening-display);
+  font-size: clamp(56px, 7.05vw, 106px);
+  font-weight: 450;
+  line-height: 0.91;
+  letter-spacing: -0.047em;
+  color: var(--ink);
+  text-wrap: initial;
+}
+
+.opening-title-line {
+  display: block;
+  padding-right: 0.04em;
+}
+
+.opening-title-line + .opening-title-line {
+  margin-top: 0.035em;
+}
+
+.opening-title-line--offset {
+  padding-left: clamp(18px, 3.4vw, 58px);
+}
+
+.opening-hero .opening-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--orange);
+  letter-spacing: -0.052em;
+}
+
+.opening-title-line--last:after {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 1px;
+  margin-left: 0.28em;
+  vertical-align: 0.18em;
+  background: var(--orange);
+}
+
+/* — Lede and entry links — */
+
+.opening-description {
+  max-width: 45ch;
+  margin: clamp(22px, 3svh, 31px) 0 0;
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.25vw, 19px);
+  font-weight: 400;
+  line-height: 1.68;
+  letter-spacing: -0.003em;
+  color: var(--ink);
+}
+
+.opening-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 13px 28px;
+  margin-top: clamp(23px, 3.4svh, 34px);
+}
+
+.opening-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 0 6px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font: 500 11px/1.2 var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.opening-link-arrow {
+  position: relative;
+  top: -0.04em;
+  font-family: var(--opening-mono);
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--orange);
+}
+
+.opening-link--primary {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.opening-link:hover {
+  color: var(--orange);
+  border-bottom-color: var(--orange);
+}
+
+.opening-link:focus-visible,
+.opening-hero .save-button:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+
+/* — Mathematical plate — */
+
+.opening-plate {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  justify-self: end;
+  width: 100%;
+  max-width: 440px;
+  margin: clamp(0px, 1.2svh, 12px) 0 0;
+  padding: clamp(11px, 1.1vw, 16px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top-color: var(--ink);
+  border-radius: 0;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.opening-plate-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 2px 11px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font: 500 8.5px/1.3 var(--opening-mono);
+  letter-spacing: 0.145em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.opening-plate-head > :last-child {
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opening-plate-art {
+  display: grid;
+  place-items: center;
+  padding: 6px 0 0;
+  min-width: 0;
+}
+
+.opening-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.opening-figure .h-field {
+  opacity: 0.6;
+}
+
+.opening-figure .h-dot {
+  fill: var(--line);
+}
+
+.opening-figure .h-frame {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.opening-figure .h-corner {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  opacity: 0.55;
+}
+
+.opening-figure .h-frame-tick {
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.35;
+}
+
+.opening-figure .h-rotor {
+  transform-origin: 260px 260px;
+  transform-box: view-box;
+  animation: opening-plate-spin 110s linear infinite;
+}
+
+.opening-figure .h-rotor-dash {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 1.5 9;
+}
+
+.opening-figure .h-rotor-mark {
+  fill: var(--orange);
+  opacity: 0.75;
+}
+
+.opening-figure .h-ring {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.opening-figure .h-ring-inner {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.8;
+  stroke-dasharray: 1 5;
+  opacity: 0.7;
+}
+
+.opening-figure .h-tick {
+  stroke: var(--ink);
+  stroke-width: 0.7;
+  opacity: 0.28;
+}
+
+.opening-figure .h-tick-major {
+  stroke: var(--ink);
+  stroke-width: 0.9;
+  opacity: 0.52;
+}
+
+.opening-figure .h-radii line {
+  stroke: var(--ink);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 4;
+  opacity: 0.26;
+}
+
+.opening-figure .h-chords path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.42;
+}
+
+.opening-figure .h-chord-accent {
+  stroke: var(--orange);
+  stroke-width: 1.25;
+  stroke-dasharray: 3 4;
+  opacity: 0.8;
+}
+
+.opening-figure .h-arc {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 1.6;
+}
+
+.opening-figure .h-arc-tick {
+  stroke: var(--orange);
+  stroke-width: 1;
+}
+
+.opening-figure .h-point-ring {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.8;
+  opacity: 0.45;
+}
+
+.opening-figure .h-point {
+  fill: var(--orange);
+}
+
+.opening-figure .h-leader {
+  stroke: var(--muted);
+  stroke-width: 0.8;
+}
+
+.opening-figure .h-center line,
+.opening-figure .h-center circle {
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.72;
+}
+
+.opening-figure .h-center circle {
+  fill: var(--orange);
+  stroke: none;
+}
+
+.opening-figure .h-label {
+  font-family: var(--opening-mono);
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  fill: currentColor;
+}
+
+.opening-figure .h-label-small {
+  font-size: 14px;
+}
+
+.opening-figure .h-label-orange {
+  fill: var(--orange);
+  font-size: 14px;
+}
+
+.opening-figure .h-formula {
+  font-family: var(--opening-display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.015em;
+  fill: var(--muted);
+}
+
+.opening-figure .h-micro {
+  font-family: var(--opening-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  fill: var(--muted);
+}
+
+.opening-plate-caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 3px 16px;
+  margin-top: 3px;
+  padding: 10px 2px 1px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 400 9px/1.5 var(--opening-mono);
+  letter-spacing: 0.035em;
+}
+
+.opening-formula {
+  color: var(--ink);
+  font-family: var(--opening-display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.opening-formula sup {
+  font-size: 0.68em;
+  line-height: 0;
+}
+
+/* — Bottom metadata — */
+
+.opening-meta-row {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 22px;
+  padding-top: clamp(12px, 1.7svh, 18px);
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+
+.opening-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin: 0;
+  min-width: 0;
+}
+
+.opening-meta-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0 clamp(18px, 2.7vw, 36px) 0 0;
+  padding: 0 clamp(18px, 2.7vw, 36px) 0 0;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+
+.opening-meta-cell:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border-right: 0;
+}
+
+.opening-meta-cell dt {
+  color: var(--muted);
+  font: 500 9px/1.3 var(--opening-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.opening-meta-cell dd {
+  margin: 0;
+  color: var(--ink);
+  font: 400 11.5px/1.35 var(--opening-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.opening-meta-time dd {
+  color: var(--ink);
+}
+
+.opening-hero .save-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 8px 0 7px;
+  color: var(--muted);
+  font: 500 9.5px/1.2 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.opening-hero .save-button span {
+  display: inline;
+}
+
+.opening-hero .save-button svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+}
+
+.opening-hero .save-button:hover {
+  color: var(--ink);
+}
+
+.opening-hero .save-button[aria-pressed="true"] {
+  color: var(--orange);
+}
+
+/* — Responsive: 1100 — */
+
+@media (max-width: 1100px) {
+  .opening-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(300px, 1fr);
+    column-gap: clamp(28px, 3.6vw, 44px);
+  }
+
+  .opening-hero .opening-title {
+    font-size: clamp(47px, 6.2vw, 78px);
+  }
+
+  .opening-title-line--offset {
+    padding-left: clamp(10px, 1.8vw, 32px);
+  }
+
+  .opening-description {
+    font-size: 17px;
+    max-width: 42ch;
+  }
+
+  .opening-meta-cell {
+    margin-right: clamp(13px, 2vw, 24px);
+    padding-right: clamp(13px, 2vw, 24px);
+  }
+}
+
+/* — Responsive: 900 (stack before the plate gets cramped) — */
+
+@media (max-width: 900px) {
+  .opening-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    row-gap: 32px;
+  }
+
+  .opening-copy {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none;
+  }
+
+  .opening-hero .opening-title {
+    font-size: clamp(50px, 9.2vw, 84px);
+    max-width: 100%;
+  }
+
+  .opening-title-line--offset {
+    padding-left: clamp(16px, 4vw, 42px);
+  }
+
+  .opening-plate {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    max-width: 440px;
+    margin-top: 0;
+  }
+
+  .opening-meta-row {
+    grid-column: 1;
+    grid-row: 3;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 18px;
+  }
+
+  .opening-meta {
+    flex: 1 1 auto;
+  }
+
+  .opening-hero .save-button {
+    margin-left: auto;
+  }
+}
+
+/* — Responsive: 760 — */
+
+@media (max-width: 760px) {
+  .opening-hero {
+    min-height: calc(100svh - 76px);
+    padding-top: 34px;
+  }
+
+  .opening-hero .opening-title {
+    font-size: clamp(50px, 10.4vw, 84px);
+    max-width: 100%;
+  }
+
+  .opening-title-line--offset {
+    padding-left: clamp(16px, 5vw, 42px);
+  }
+
+  .opening-description {
+    max-width: 48ch;
+  }
+
+  .opening-plate {
+    max-width: 440px;
+  }
+}
+
+/* — Responsive: 480 — */
+
+@media (max-width: 480px) {
+  .opening-hero {
+    min-height: 0;
+    padding-top: 27px;
+    padding-bottom: 20px;
+  }
+
+  .opening-kicker {
+    gap: 8px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .opening-kicker-rule {
+    width: 18px;
+  }
+
+  .opening-hero .opening-title {
+    margin-top: 23px;
+    font-size: clamp(44px, 13.4vw, 58px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+  }
+
+  .opening-title-line--offset {
+    padding-left: 15px;
+  }
+
+  .opening-title-line--last:after {
+    width: 0.56em;
+    margin-left: 0.22em;
+  }
+
+  .opening-description {
+    margin-top: 21px;
+    font-size: 15.5px;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+
+  .opening-links {
+    gap: 12px 20px;
+    margin-top: 23px;
+  }
+
+  .opening-link {
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+  }
+
+  .opening-grid {
+    row-gap: 27px;
+  }
+
+  .opening-plate {
+    padding: 10px;
+  }
+
+  .opening-plate-head {
+    padding-bottom: 9px;
+    font-size: 7.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .opening-plate-art {
+    padding-top: 4px;
+  }
+
+  .opening-figure .h-label {
+    font-size: 17px;
+  }
+
+  .opening-figure .h-label-small,
+  .opening-figure .h-label-orange {
+    font-size: 16px;
+  }
+
+  .opening-figure .h-formula {
+    font-size: 15px;
+  }
+
+  .opening-figure .h-micro {
+    font-size: 10px;
+  }
+
+  .opening-plate-caption {
+    padding-top: 8px;
+    font-size: 8px;
+  }
+
+  .opening-formula {
+    font-size: 13px;
+  }
+
+  .opening-meta-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .opening-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 18px;
+    width: 100%;
+  }
+
+  .opening-meta-cell {
+    margin: 0;
+    padding: 0;
+    border-right: 0;
+  }
+
+  .opening-meta-source {
+    grid-column: 1 / -1;
+  }
+
+  .opening-hero .save-button {
+    align-self: flex-end;
+    margin: 0;
+  }
+}
+
+/* — Motion and print — */
+
+@keyframes opening-plate-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opening-figure .h-rotor {
+    animation: none;
+  }
+
+  .opening-link {
+    transition: none;
+  }
+}
+
+@media print {
+  .opening-hero {
+    display: none;
+  }
+}
