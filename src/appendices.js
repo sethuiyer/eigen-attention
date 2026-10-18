@@ -16,11 +16,39 @@ Lower mean squared error is better. Entries are means across three training seed
 
 **What the experiment supports.** Eight learned harmonic coefficients were enough to improve on a 288-parameter dot-product baseline for the two stationary signal tasks. The Gram constraint cost error on those tasks, which is consistent with the expressivity gap: the constraint is a structural prior, not a free improvement.
 
-**Where position is insufficient.** On content grouping, position-only models retained roughly \(6\times10^{-2}\) error, while content-dependent attention dropped to \(10^{-5}\) or below. The hybrid preserved the useful positional structure and solved the content task, reaching \(2.9\times10^{-6}\) with 56 parameters.
+**Where position is insufficient.** On content grouping, position-only models retained roughly \(6\times10^{-2}\) error, while content-dependent attention dropped to \(10^{-5}\) or below. The dot-product baseline reached \(3.743\times10^{-5}\), roughly \(1.6\times10^{3}\) times lower than the pure multi-band model, showing a fixed positional kernel cannot solve this task. The hybrid, combining both paths, reached \(2.898\times10^{-6}\) with 56 parameters — about \(12.9\times\) below the dot-product baseline.
 
 These results support the combined design direction: **rotational structure for stationary signal processing, plus content-dependent scores when the task requires grouping.** They do not establish superiority over a complete Transformer, language-model quality, or a speed/memory advantage. Value maps, residuals, and output projections were deliberately removed. The tasks match the cyclic assumptions, and one optimizer configuration was used without a hyperparameter or parameter-matched sweep. The reported variation is across training seeds on a common test set, not across independently generated test sets.
 
-**Artifacts.** The runnable experiment is [benchmark.py](./experiments/rotational-attention/benchmark.py), with [results.json](./experiments/rotational-attention/results.json), [README.md](./experiments/rotational-attention/README.md), and the [complete archive](./experiments/rotational-attention-experiment.zip). The analytic gradient check agrees with finite differences to \(2.91\times10^{-13}\).`;
+## 27. Factorial ablation: harmonics vs. positional parameters
+
+The first experiment established that harmonic scores are trainable. It did not isolate whether the harmonic *basis* contributes anything beyond spending positional parameters. This experiment closes that gap with a controlled factorial design on mixed-frequency denoising: the content pathway (Wq/Wk over `(value, label, 1)`, head_dim 8) is architecturally identical across every model that includes it, and two different positional priors are compared at the same parameter budget. Ten seeds per cell, seed root 20261018, checkpoint selection on 512 validation examples, 4,096 held-out test examples.
+
+| Model | Positional harmonics | Content scores | Positional params | In-distribution MSE |
+| --- | --- | --- | ---: | ---: |
+| A. Positional only | learned β (per band) | no | 8 | **0.4708** |
+| B. Content only | none | yes | 0 | 0.8707 |
+| C. Harmonic hybrid | learned β + content | identical to B | 8 | **0.4680** |
+| D. Content + learned RPB | relative-position bias table (n entries) | identical to B | n | **0.4687** |
+
+**Three answers.** First, content alone is *catastrophic* here — B (0.8707) is nearly twice as bad as every model with positional information, because the pure content pathway cannot distinguish *where* a token sits and therefore cannot denoise frequency structure. Second, **the harmonic basis does not beat an equally-sized learned relative-position bias**: C (0.4680) and D (0.4687) differ by \(7.2\times10^{-4}\) MSE, and the paired bootstrap 95% CI is \([-1.0\times10^{-3},\ -4.4\times10^{-4}]\). The difference is statistically detectable but practically negligible — roughly 0.15% of the total error. Third, harmonic structure *does* help sample efficiency: at 1/8 of the training budget the harmonic hybrid reaches 0.4841 vs. D's 0.5088 and A's 0.5070, a clear early-training advantage that narrows as data increases.
+
+**Distribution shift (train- and eval-at-shift configs, mean over 10 seeds).**
+
+| Shift | A | B | C | D |
+| --- | ---: | ---: | ---: | ---: |
+| n=16 baseline | 0.4697 | 0.8604 | 0.4663 | 0.4676 |
+| n=32 | 0.2568 | 0.5416 | 0.2556 | 0.2520 |
+| n=64 | 0.1227 | 0.3268 | 0.1209 | **0.1206** |
+| noise ×0.4 | 0.4680 | 0.8701 | 0.4644 | 0.4651 |
+| noise ×2.5 | 0.4796 | 0.8857 | 0.4755 | 0.4761 |
+| band shift +2 | 0.3633 | 0.7002 | 0.3631 | 0.3634 |
+
+Two honest observations. The shift arm retrains at each configuration because the harmonic parameterization changes size with \(n\) (8 coefficients at \(n=16\), 16 at \(n=32\), 32 at \(n=64\)); this measures architectural transfer, not inference-time length generalization. And at larger \(n\) the learned RPB (D) actually edges out the harmonic model (C), with 0.1206 vs 0.1209 at \(n=64\) — the two designs converge once the positional bias has enough capacity to fit whatever profile it needs.
+
+**What this changes in the story.** The §26 headline — harmonic attention with 8 parameters beating a 288-parameter dot-product baseline on mixed-frequency denoising — was real but underdiagnosed. The factorial decomposition shows the advantage was *not* about harmonic structure versus other positional priors; harmonic β and a learned RPB land within noise of each other, and both inherit their gains from injecting positional information that the pure content model lacks. The remaining genuine differentiator is the harmonic prior's **sample efficiency at low training budgets**, where the structured basis does appear to reach a good solution faster than an unconstrained bias table.
+
+**Artifacts.** [factorial_ablation.py](./experiments/factorial-ablation/factorial_ablation.py), [results.json](./experiments/factorial-ablation/results.json), and [README.md](./experiments/factorial-ablation/README.md) document the design, the paired bootstrap method (5,000 resamples, 95% level), and the full per-seed runs. Gradient checks across all four models: max finite-difference error \(4.44\times10^{-11}\).`;
 
 export const appendixSource = String.raw`## Appendix A — Reproducible checks
 
