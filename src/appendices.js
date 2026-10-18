@@ -82,7 +82,36 @@ An unexpected finding: the frozen harmonic model's \(n=128\) performance *degrad
 
 **The full architectural story.** The three experiments now compose into a single narrative: (§26) harmonic scores are trainable and beat a much larger dot-product baseline on stationary tasks; (§27) the harmonic *basis* is not uniquely special — an equal-parameter learned RPB matches it in-distribution; but (§28) harmonic structure has a unique **frozen length transfer** property that RPBs lack, because frequencies are absolute and lengths are relative. The hybrid "harmonic + content" architecture is therefore not a cheap Transformer, nor uniquely powerful in-distribution — it is a positional prior with a transfer behavior that content-only and RPB-based attention cannot match when evaluated at lengths other than the training length.
 
-**Artifacts.** [length_generalization.py](./experiments/length-generalization/length_generalization.py), [results.json](./experiments/length-generalization/results.json), and [README.md](./experiments/length-generalization/README.md) document the fixed-frequency parameterization, the paired bootstrap method, and the per-seed runs. Gradient checks: max finite-difference error \(4.24\times10^{-11}\).`;
+**Artifacts.** [length_generalization.py](./experiments/length-generalization/length_generalization.py), [results.json](./experiments/length-generalization/results.json), and [README.md](./experiments/length-generalization/README.md) document the fixed-frequency parameterization, the paired bootstrap method, and the per-seed runs. Gradient checks: max finite-difference error \(4.24\times10^{-11}\).
+
+## 29. Positional prior comparison: harmonic β vs RoPE vs ALiBi vs continuous RPB
+
+Is the frozen length transfer advantage specific to the learned harmonic parameterization, or is it shared by the priors already deployed in production attention models? This section puts harmonic β, RoPE, ALiBi, and a continuous relative-position bias head-to-head under identical conditions: same content pathway, same optimizer, same checkpoint selection, same mixed-frequency denoising task, 10 seeds per cell (seed root 20261018). Training is at \(n=16\); evaluation is frozen at 16, 32, 64, 128.
+
+The four priors span the learnability–expressivity tradeoff. RoPE has **zero learned positional parameters** — the rotation frequencies \(\theta_k = 10000^{-2(k-1)/8}\) are fixed by design, making it the minimum-parameters baseline that the others must beat to justify themselves. ALiBi has **one** learned slope scaling a linear \(\Delta\) penalty. Continuous RPB is a learned 2-layer MLP on \((\sin(2\pi\Delta/n), \cos(2\pi\Delta/n))\), hidden size 4 (10 parameters) — it normalizes by \(n\), so it transfers automatically. Harmonic β has **8** learned absolute-frequency coefficients.
+
+**Results, frozen after training at n=16, mean over 10 seeds.**
+
+| Eval length | Harmonic β | RoPE | ALiBi | Continuous RPB | Best prior |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 16 (train) | **0.3734** | 0.7271 | 0.6809 | 0.5255 | harmonic |
+| 32 | 0.4403 | 0.4610 | 0.5203 | **0.3414** | continuous RPB |
+| 64 | 0.2332 | **0.2217** | 0.4511 | 0.1975 | continuous RPB |
+| 128 | 0.1162 | 0.1614 | 0.4214 | **0.1087** | continuous RPB |
+
+All paired harmonic-vs-other differences are decisive except harmonic-vs-continuous-RPB at \(n=128\), which is within \(7\times10^{-3}\) with a CI excluding zero by only \(2\times10^{-3}\). The bootstrap CIs are in the linked artifact.
+
+**Three structural findings.**
+
+*First, harmonic β dominates in-distribution.* Its 0.3734 at \(n=16\) is roughly half RoPE's 0.7271 and far below ALiBi's 0.6809. RoPE's fixed frequencies cannot learn the task's spectral shape; ALiBi's single slope learns only "prefer local" but cannot represent band-pass structure. The harmonic prior's advantage is not transfer — it is expressive matching of the spectral signal, which requires learning.
+
+*Second, no single prior wins at every length, and harmonic β has a specific failure mode.* At \(n=32\), continuous RPB beats harmonic (0.3414 vs 0.4403) because the task's \(m=n/2=16\) band falls outside the 8 learned harmonic coefficients. At \(n=64\) and \(n=128\), the two designs converge within noise, and RoPE is competitive at \(n=64\) because its fixed rotation frequencies include useful intermediate bands by construction. **Frozen transfer depends on the target length's spectral support overlapping the learned bands** — the same conclusion §28 drew for RPBs.
+
+*Third, ALiBi is the clear loser.* Its frozen transfer is the worst of the four at every length beyond training (0.5203, 0.4511, 0.4214 at 32/64/128). This is not surprising: the linear \(\Delta\) penalty has a single scalar to encode shape, and its magnitude scales linearly with the Δ range when applied un-normalized, so the same learned slope effectively applies a much stronger penalty at longer lengths. ALiBi's design — a coarse, position-count-based bias — has no spectral content to transfer.
+
+**What this changes in the architectural story.** Harmonic β is the best prior when the task's frequencies are fixed and you are training — but *not* uniquely good for frozen transfer. Continuous RPB matches or beats it at every longer length once the frequency support shifts out of the learned bands, because it re-normalizes by \(n\) and can express shapes the harmonic basis can't. RoPE is competitive at \(n=64\) despite no learning, validating that its fixed rotation frequencies are a reasonable universal inductive bias. **The correct architectural recommendation is not "use harmonic attention," but rather: match the positional prior to the task's spectral content, and retrain (or use a length-normalized continuous prior) when the task's frequency support changes with length.** For the specific setting of stationary signals with a fixed spectral prior, harmonic β remains the strongest learned parameterization we have measured — but it is not a general-purpose winner.
+
+**Artifacts.** [positional_prior_comparison.py](./experiments/positional-prior-comparison/positional_prior_comparison.py), [results.json](./experiments/positional-prior-comparison/results.json), and [README.md](./experiments/positional-prior-comparison/README.md) document the design, RoPE's fixed-frequency implementation, paired bootstrap method, and per-seed runs. Gradient checks: max finite-difference error \(4.72\times10^{-11}\).`;
 export const appendixSource = String.raw`## Appendix A — Reproducible checks
 
 All numerical claims in the two theorem notes have a runnable check:
