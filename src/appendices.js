@@ -22,7 +22,7 @@ These results support the combined design direction: **rotational structure for 
 
 ## 27. Factorial ablation: harmonics vs. positional parameters
 
-The first experiment established that harmonic scores are trainable. It did not isolate whether the harmonic *basis* contributes anything beyond spending positional parameters. This experiment closes that gap with a controlled factorial design on mixed-frequency denoising: the content pathway (Wq/Wk over `(value, label, 1)`, head_dim 8) is architecturally identical across every model that includes it, and two different positional priors are compared at the same parameter budget. Ten seeds per cell, seed root 20261018, checkpoint selection on 512 validation examples, 4,096 held-out test examples.
+The first experiment established that harmonic scores are trainable. It did not isolate whether the harmonic *basis* contributes anything beyond spending positional parameters. This experiment closes that gap with a controlled factorial design on mixed-frequency denoising: the content pathway (Wq/Wk over the vector ("value", "label", 1), head_dim 8) is architecturally identical across every model that includes it, and two different positional priors are compared at the same parameter budget. Ten seeds per cell, seed root 20261018, checkpoint selection on 512 validation examples, 4,096 held-out test examples.
 
 | Model | Positional harmonics | Content scores | Positional params | In-distribution MSE |
 | --- | --- | --- | ---: | ---: |
